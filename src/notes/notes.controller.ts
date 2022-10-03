@@ -10,14 +10,11 @@ export class NotesController {
     return await this.notesService.getAllNotes();
   }
 
-  @Get('from')
-  async getNotesByIdDate(@Query('start') id = -1, @Query('count') count = 5): Promise<Array<NoteEntity>> {
-    return await this.notesService.getNotesByIdDate(id, count);
-  }
-
   @Get()
-  async getNotes(@Query('start') start = "", @Query('count') count = 5): Promise<Array<NoteEntity>> {
-    return await this.notesService.getNotes(start, count);
+  async getNotes(@Query('start') start: number | false = false, @Query('count') count = 5): Promise<Array<NoteEntity>> {
+
+    const res = await this.notesService.getNotes((start as unknown) === "false" ? false : start, count);
+    return (start as unknown) === "false" ? res : res.slice(1);
   }
 
   @Get(':id')
@@ -26,9 +23,12 @@ export class NotesController {
   }
 
   @Put()
-  async saveNotes(@Body() body): Promise<Array<NoteEntity>> {
-    console.log(body);
-    return null; // await this.notesService.bulkCreate()
+  async saveNotes(@Body() body: {color: string}): Promise<number> {
+    return await this.notesService.createNote({
+      title: "New note",
+      content: "New content",
+      color: body.color,
+    });
   }
 
   // save notes i guss is the same as save and edit

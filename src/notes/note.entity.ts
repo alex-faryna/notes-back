@@ -11,13 +11,18 @@ export class NoteEntity {
     @Column()
     content: string;
 
-    @OneToOne(() => NoteEntity, note => note.id)
-    @JoinColumn()
-    prev: number;
+    @Column({
+        nullable: true,
+        unique: false,
+    })
+    last: number;
+
+    @Column()
+    color: string;
 
     @OneToOne(() => NoteEntity, note => note.id)
     @JoinColumn()
-    next: number;
+    prev: number;
 
     creationId?: number;
 }
