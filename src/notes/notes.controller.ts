@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Put, Query} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put, Query} from '@nestjs/common';
 import { NotesService } from './notes.service';
 import {NoteEntity} from "./note.entity";
 @Controller('notes')
@@ -32,10 +32,9 @@ export class NotesController {
   }
 
   // save notes i guss is the same as save and edit
-  @Put()
-  async updateNotes(@Body() body): Promise<Array<NoteEntity>> {
-    console.log(body);
-    return null; // await this.notesService.bulkUpdate()
+  @Post()
+  async updateNote(@Body() body: {note: NoteEntity}): Promise<NoteEntity> {
+    return await this.notesService.updateNote(body.note);
   }
 
   @Delete()

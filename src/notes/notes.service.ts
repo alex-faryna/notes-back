@@ -28,15 +28,6 @@ export class NotesService {
         return this.notesRepository.findOneBy({id});
     }
 
-    async bulkCreate(notes: Array<Partial<NoteEntity>>): Promise<Array<NoteEntity>> {
-        return this.notesRepository.save(notes);
-    }
-
-    // same as bulkCreate i guess?
-    async bulkEdit(): Promise<NoteEntity> {
-        return null;
-    }
-
     async bulkDelete(notes: Array<number>): Promise<unknown> {
         return this.notesRepository.delete({id: In(notes)});
     }
@@ -79,6 +70,10 @@ export class NotesService {
                 .execute();
         })
         return res;
+    }
+
+    async updateNote(note: NoteEntity): Promise<NoteEntity> {
+        return this.notesRepository.save(note);
     }
 
     private static getNotesQuery(id: number | false = false, count: number | false = false): string {
